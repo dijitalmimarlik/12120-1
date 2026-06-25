@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje İndirme Portalı | Bozoğlu Architects</title>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body { background-color: #fafafa; color: #1a1a1a; line-height: 1.6; min-height: 100vh; }
+
+        header { background-color: #ffffff; border-bottom: 1px solid #e5e5e5; position: sticky; top: 0; z-index: 1000; }
+        /* Üst menüyü iki yana yaslamak için flex yapısı eklendi */
+        .header-container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo a { font-size: 18px; font-weight: 700; text-decoration: none; color: #1a1a1a; letter-spacing: 2px; }
+
+        /* Yeni eklenen üst menü linklerinin stilleri */
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { font-size: 12px; font-weight: 600; text-decoration: none; color: #666; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s ease; }
+        .nav-links a:hover { color: #1a1a1a; }
+
+        .main-wrapper { display: flex; justify-content: center; align-items: flex-start; min-height: 80vh; padding: 40px 20px; }
+        /* Yatayda daha geniş bir görünüm için max-width 650px'den 800px'e çıkarıldı */
+        .container { background: #fff; padding: 40px; width: 100%; max-width: 800px; border: 1px solid #e5e5e5; }
+        h1 { font-size: 16px; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; color: #333; text-align: center; }
+        
+        /* Arama Kutusu Tasarımı */
+        .search-wrapper { margin-bottom: 30px; }
+        .search-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 13px;
+            border: 1px solid #e5e5e5;
+            outline: none;
+            letter-spacing: 0.5px;
+            transition: border-color 0.2s ease;
+        }
+        .search-input:focus { border-color: #1a1a1a; }
+        
+        /* Dosya Listesi */
+        .file-list { margin-top: 10px; }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border: 1px solid #e5e5e5;
+            transition: all 0.2s ease;
+        }
+        .file-item:hover { border-color: #1a1a1a; background: #fcfcfc; }
+        
+        .file-info { display: flex; flex-direction: column; max-width: 70%; }
+        .file-name { font-size: 14px; font-weight: 600; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .file-meta { font-size: 11px; color: #888; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .download-btn {
+            background: #1a1a1a; color: #fff; text-decoration: none; padding: 8px 16px; 
+            font-size: 12px; letter-spacing: 1px; text-transform: uppercase; transition: background 0.2s;
+            font-weight: 500;
+        }
+        .download-btn:hover { background: #444; }
+        
+        .no-results { text-align: center; color: #888; font-size: 13px; padding: 30px 0; display: none; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="#">BOZOĞLU ARCHITECTS</a>
+            </div>
+            <nav class="nav-links">
+                <a href="#">DOSYA GÖNDER</a>
+                <a href="https://bozogluarchitects.com" target="_blank">KURUMSAL SİTE</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <h1>PAYLAŞILAN PROJE DOSYALARI</h1>
+            
+            <div class="search-wrapper">
+                <input type="text" id="projectSearch" class="search-input" onkeyup="filterFiles()" placeholder="PROJE VEYA FORMAT ARA...">
+            </div>
+            
+            <div class="file-list" id="fileList">
+                
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-name">Zümrüt Sitesi - Kat Planları.dwg</span>
+                        <span class="file-meta">Format: AutoCAD DWG | Boyut: 12.4 MB</span>
+                    </div>
+                    <a href="https://ucarecdn.com/PROJE_DOSYA_UUID_1/-/inline/no/Zumrut_Sitesi_Kat_Planlari.dwg" target="_blank" class="download-btn">İndir</a>
+                </div>
+
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-name">Aktaş Apartmanı - Cephe Tasarımı Raporu.pdf</span>
+                        <span class="file-meta">Format: PDF Belgesi | Boyut: 4.2 MB</span>
+                    </div>
+                    <a href="https://ucarecdn.com/PROJE_DOSYA_UUID_2/-/inline/no/Aktas_Apartmani_Cephe_Raporu.pdf" target="_blank" class="download-btn">İndir</a>
+                </div>
+
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-name">3D Render Görüntüleri - Paket.zip</span>
+                        <span class="file-meta">Format: ZIP Arşivi | Boyut: 85.0 MB</span>
+                    </div>
+                    <a href="https://ucarecdn.com/PROJE_DOSYA_UUID_3/-/inline/no/3D_Render_Paketi.zip" target="_blank" class="download-btn">İndir</a>
+                </div>
+
+                <div class="no-results" id="noResults">ARANAN KRİTERE UYGUN PROJE DOSYASI BULUNAMADI.</div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterFiles() {
+            const input = document.getElementById('projectSearch');
+            const filter = input.value.toUpperCase();
+            const fileList = document.getElementById('fileList');
+            const items = fileList.getElementsByClassName('file-item');
+            const noResults = document.getElementById('noResults');
+            let visibleCount = 0;
+
+            for (let i = 0; i < items.length; i++) {
+                const nameSpan = items[i].getElementsByClassName('file-name')[0];
+                const metaSpan = items[i].getElementsByClassName('file-meta')[0];
+                
+                const textContent = (nameSpan.textContent || nameSpan.innerText) + " " + (metaSpan.textContent || metaSpan.innerText);
+                
+                if (textContent.toUpperCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                    visibleCount++;
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+
+            if (visibleCount === 0 && filter !== "") {
+                noResults.style.display = "block";
+            } else {
+                noResults.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
