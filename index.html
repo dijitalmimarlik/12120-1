@@ -61,7 +61,7 @@
             background: #1a1a1a; color: #fff; text-decoration: none; padding: 8px 16px; 
             font-size: 12px; letter-spacing: 1px; text-transform: uppercase; transition: background 0.2s; font-weight: 500;
         }
-        .download-btn:hover { background: #444; }
+        .download-btn:hover { background: #444; cursor: pointer; }
         
         .no-results { text-align: center; color: #888; font-size: 13px; padding: 30px 0; display: none; letter-spacing: 0.5px; }
     </style>
@@ -160,13 +160,11 @@
 
 
         // --- 2. GITHUB BULUT KLASÖRÜNDEN DOSYA ÇEKME AYARLARI ---
-        // ⚠️ LÜTFEN BURAYI KENDİ BİLGİLERİNİZE GÖRE DOLDURUN:
         const GITHUB_USER = 'dijitalmimarlik'; 
         const GITHUB_REPO = 'bulut';              
-        const GITHUB_PATH = 'bulut'; // Taranacak klasör adı
+        const GITHUB_PATH = 'bulut'; 
 
         async function loadBulutFiles() {
-            // Eğer varsayılan değerler değiştirilmediyse fonksiyonu çalıştırma
             if(GITHUB_USER === 'GITHUB_KULLANICI_ADINIZ') return;
 
             const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
@@ -180,23 +178,24 @@
                 const data = await response.json();
 
                 data.forEach(item => {
-                    // Sadece dosyaları listele (alt klasörleri atla)
                     if (item.type === 'file') {
                         const fileItem = document.createElement('div');
                         fileItem.className = 'file-item';
 
-                        // Uzantıya göre estetik format ismi belirleme ve boyutu MB'a çevirme
                         const metaText = generateMetaText(item.name, item.size);
+
+                        // DİKKAT: Link github.com üzerinden değil, kendi web sitenizin klasörü üzerinden çalıştırıldı.
+                        // "download" niteliği sayesinde dosya tarayıcıda açılmaz, doğrudan indirilir.
+                        const siteLink = `${GITHUB_PATH}/${encodeURIComponent(item.name)}`;
 
                         fileItem.innerHTML = `
                             <div class="file-info">
                                 <span class="file-name">${item.name}</span>
                                 <span class="file-meta">${metaText}</span>
                             </div>
-                            <a href="${item.download_url}" target="_blank" class="download-btn">İndir</a>
+                            <a href="${siteLink}" download="${item.name}" class="download-btn">İndir</a>
                         `;
 
-                        // Yeni dosyaları listenin sonuna, "Sonuç Bulunamadı" uyarısının hemen önüne ekler
                         fileList.insertBefore(fileItem, noResults);
                     }
                 });
@@ -205,7 +204,6 @@
             }
         }
 
-        // Dosya uzantısını ve boyutunu kurumsal formata dönüştüren yardımcı fonksiyon
         function generateMetaText(filename, sizeBytes) {
             const ext = filename.split('.').pop().toLowerCase();
             let formatStr = ext.toUpperCase() + " Dosyası";
@@ -220,7 +218,6 @@
             return `Format: ${formatStr} | Boyut: ${sizeMB} MB`;
         }
 
-        // Sayfa tamamen yüklendiğinde GitHub taramasını başlat
         document.addEventListener('DOMContentLoaded', loadBulutFiles);
 
 
