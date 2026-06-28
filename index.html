@@ -3,51 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proje İndirme Portalı | Bozoğlu Architects</title>
+    <title>Proje İndirme ve Yükleme Portalı | Bozoğlu Architects</title>
+    
+    <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        body { background-color: #fafafa; color: #1a1a1a; line-height: 1.6; min-height: 100vh; }
+        body { background-color: #fafafa; color: #1a1a1a; line-height: 1.6; min-height: 100vh; scroll-behavior: smooth; }
 
+        /* Üst Menü */
         header { background-color: #ffffff; border-bottom: 1px solid #e5e5e5; position: sticky; top: 0; z-index: 1000; }
-        /* Üst menüyü iki yana yaslamak için flex yapısı eklendi */
         .header-container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         .logo a { font-size: 18px; font-weight: 700; text-decoration: none; color: #1a1a1a; letter-spacing: 2px; }
 
-        /* Yeni eklenen üst menü linklerinin stilleri */
         .nav-links { display: flex; gap: 25px; }
         .nav-links a { font-size: 12px; font-weight: 600; text-decoration: none; color: #666; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s ease; }
         .nav-links a:hover { color: #1a1a1a; }
 
+        /* Ana Gövde */
         .main-wrapper { display: flex; justify-content: center; align-items: flex-start; min-height: 80vh; padding: 40px 20px; }
-        /* Yatayda daha geniş bir görünüm için max-width 650px'den 800px'e çıkarıldı */
         .container { background: #fff; padding: 40px; width: 100%; max-width: 800px; border: 1px solid #e5e5e5; }
         h1 { font-size: 16px; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; color: #333; text-align: center; }
         
-        /* Arama Kutusu Tasarımı */
+        /* Dosya Yükleme Bölümü */
+        .upload-section { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #e5e5e5; text-align: center; }
+        .uploadcare--widget { margin: 20px 0; }
+        .success-status {
+            display: none; background: #f4fbf7; color: #146c43; border: 1px solid #a3cfbb;
+            padding: 15px; font-size: 14px; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; margin-top: 20px; animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .info { margin-top: 20px; font-size: 12px; color: #888; }
+
+        /* Arama Kutusu */
         .search-wrapper { margin-bottom: 30px; }
         .search-input {
-            width: 100%;
-            padding: 14px 18px;
-            font-size: 13px;
-            border: 1px solid #e5e5e5;
-            outline: none;
-            letter-spacing: 0.5px;
-            transition: border-color 0.2s ease;
+            width: 100%; padding: 14px 18px; font-size: 13px; border: 1px solid #e5e5e5;
+            outline: none; letter-spacing: 0.5px; transition: border-color 0.2s ease;
         }
         .search-input:focus { border-color: #1a1a1a; }
         
         /* Dosya Listesi */
         .file-list { margin-top: 10px; }
         .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-            padding: 15px 20px;
-            margin-bottom: 12px;
-            border: 1px solid #e5e5e5;
-            transition: all 0.2s ease;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #fff; padding: 15px 20px; margin-bottom: 12px;
+            border: 1px solid #e5e5e5; transition: all 0.2s ease;
         }
         .file-item:hover { border-color: #1a1a1a; background: #fcfcfc; }
         
@@ -57,8 +59,7 @@
         
         .download-btn {
             background: #1a1a1a; color: #fff; text-decoration: none; padding: 8px 16px; 
-            font-size: 12px; letter-spacing: 1px; text-transform: uppercase; transition: background 0.2s;
-            font-weight: 500;
+            font-size: 12px; letter-spacing: 1px; text-transform: uppercase; transition: background 0.2s; font-weight: 500;
         }
         .download-btn:hover { background: #444; }
         
@@ -73,7 +74,7 @@
                 <a href="https://bozogluarchitects.com/">BOZOĞLU ARCHITECTS</a>
             </div>
             <nav class="nav-links">
-                <a href="https://dosya.dijitalmimarlik.com/">DOSYA GÖNDER</a>
+                <a href="#uploadSection">DOSYA GÖNDER</a>
                 <a href="https://bozogluarchitects.com/" target="_blank">KURUMSAL SİTE</a>
             </nav>
         </div>
@@ -81,6 +82,25 @@
 
     <div class="main-wrapper">
         <div class="container">
+            
+            <div class="upload-section" id="uploadSection">
+                <h1>DOSYA GÖNDER</h1>
+                
+                <input type="hidden" 
+                       role="uploadcare-uploader" 
+                       id="file-uploader"
+                       data-multiple="true"
+                       data-tabs="file" />
+
+                <div id="success-message" class="success-status">
+                    ✓ Yükleme Başarılı
+                </div>
+
+                <p class="info">
+                    Birden fazla dosyayı aynı anda sürükleyip bırakabilirsiniz. (Max 150 Mb.)
+                </p>
+            </div>
+            
             <h1>PAYLAŞILAN PROJE DOSYALARI</h1>
             
             <div class="search-wrapper">
@@ -120,6 +140,91 @@
     </div>
 
     <script>
+        // --- 1. UPLOADCARE AYARLARI ---
+        UPLOADCARE_PUBLIC_KEY = 'abda72c67d81e901d922';
+        UPLOADCARE_LOCALE = 'tr';
+        UPLOADCARE_MULTIPLE = true;
+
+        const widget = uploadcare.Widget('#file-uploader');
+        const successMessage = document.getElementById('success-message');
+
+        widget.onUploadComplete(function(info) {
+            successMessage.style.display = 'block';
+        });
+
+        widget.onChange(function(file) {
+            if (!file) {
+                successMessage.style.display = 'none';
+            }
+        });
+
+
+        // --- 2. GITHUB BULUT KLASÖRÜNDEN DOSYA ÇEKME AYARLARI ---
+        // ⚠️ LÜTFEN BURAYI KENDİ BİLGİLERİNİZE GÖRE DOLDURUN:
+        const GITHUB_USER = 'dijitalmimarlik'; 
+        const GITHUB_REPO = 'bulut';              
+        const GITHUB_PATH = 'bulut'; // Taranacak klasör adı
+
+        async function loadBulutFiles() {
+            // Eğer varsayılan değerler değiştirilmediyse fonksiyonu çalıştırma
+            if(GITHUB_USER === 'GITHUB_KULLANICI_ADINIZ') return;
+
+            const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
+            const fileList = document.getElementById('fileList');
+            const noResults = document.getElementById('noResults');
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('GitHub klasörü okunamadı.');
+                
+                const data = await response.json();
+
+                data.forEach(item => {
+                    // Sadece dosyaları listele (alt klasörleri atla)
+                    if (item.type === 'file') {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'file-item';
+
+                        // Uzantıya göre estetik format ismi belirleme ve boyutu MB'a çevirme
+                        const metaText = generateMetaText(item.name, item.size);
+
+                        fileItem.innerHTML = `
+                            <div class="file-info">
+                                <span class="file-name">${item.name}</span>
+                                <span class="file-meta">${metaText}</span>
+                            </div>
+                            <a href="${item.download_url}" target="_blank" class="download-btn">İndir</a>
+                        `;
+
+                        // Yeni dosyaları listenin sonuna, "Sonuç Bulunamadı" uyarısının hemen önüne ekler
+                        fileList.insertBefore(fileItem, noResults);
+                    }
+                });
+            } catch (error) {
+                console.error('GitHub dosyaları yüklenirken bir hata oluştu:', error);
+            }
+        }
+
+        // Dosya uzantısını ve boyutunu kurumsal formata dönüştüren yardımcı fonksiyon
+        function generateMetaText(filename, sizeBytes) {
+            const ext = filename.split('.').pop().toLowerCase();
+            let formatStr = ext.toUpperCase() + " Dosyası";
+            
+            if (ext === 'dwg') formatStr = "AutoCAD DWG";
+            else if (ext === 'pdf') formatStr = "PDF Belgesi";
+            else if (ext === 'zip') formatStr = "ZIP Arşivi";
+            else if (ext === 'rar') formatStr = "RAR Arşivi";
+            else if (ext === 'png' || ext === 'jpg' || ext === 'jpeg') formatStr = "Görsel / Render";
+
+            const sizeMB = (sizeBytes / (1024 * 1024)).toFixed(1);
+            return `Format: ${formatStr} | Boyut: ${sizeMB} MB`;
+        }
+
+        // Sayfa tamamen yüklendiğinde GitHub taramasını başlat
+        document.addEventListener('DOMContentLoaded', loadBulutFiles);
+
+
+        // --- 3. ARAMA KUTUSU FİLTRELEME AYARLARI ---
         function filterFiles() {
             const input = document.getElementById('projectSearch');
             const filter = input.value.toUpperCase();
